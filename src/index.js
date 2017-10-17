@@ -56,7 +56,8 @@ class ReactTooltip extends Component {
     disable: PropTypes.bool,
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
-    wrapper: PropTypes.string
+    wrapper: PropTypes.string,
+    onPositionChange: PropTypes.func
   };
 
   static defaultProps = {
@@ -388,14 +389,24 @@ class ReactTooltip extends Component {
   // Calculation the position
   updatePosition () {
     const {currentEvent, currentTarget, place, effect, offset} = this.state
+    const { onPositionChange } = this.props;
     const node = ReactDOM.findDOMNode(this)
     const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
 
     if (result.isNewState) {
-      // Switch to reverse placement
+      // TODO: Delete this comment section:
+      // result.newState is an object of the form: { place: top|bottom|left|right },
+      // therefore the following `this.setState` sets the `place` as top, bottom, left, or right.
       return this.setState(result.newState, () => {
         this.updatePosition()
+        if (onPositionChange) {
+          onPositionChange(true, result.newState.place);
+        }
       })
+    } else {
+      if (onPositionChange) {
+        onPositionChange(false, place);
+      }
     }
     // Set tooltip position
     node.style.left = result.position.left + 'px'
