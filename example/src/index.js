@@ -15,6 +15,10 @@ class Test extends Component {
     }
   }
 
+  logResults(newPosition) {
+    console.log(newPosition);
+  }
+
   changePlace (place) {
     this.setState({
       place: place
@@ -83,7 +87,7 @@ class Test extends Component {
               </div>
             </pre>
           </div>
-          <ReactTooltip id='main' place={place} type={type} effect={effect} multiline={true}/>
+          <ReactTooltip topClassName='custom-top-background' rightClassName='custom-right-background' id='main' place={place} type={type} effect={effect} multiline={true} onPlaceChange={this.logResults} />
         </section>
         <section className="advance">
           <div className="section">

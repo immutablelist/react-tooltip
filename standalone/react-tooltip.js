@@ -1634,6 +1634,8 @@ var _style2 = _interopRequireDefault(_style);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -1649,6 +1651,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
 
     _this.state = {
+      placeBeforeUpdate: null,
       place: 'top', // Direction of tooltip
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
@@ -2033,16 +2036,24 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       var _state3 = this.state,
           currentEvent = _state3.currentEvent,
           currentTarget = _state3.currentTarget,
+          placeBeforeUpdate = _state3.placeBeforeUpdate,
           place = _state3.place,
           effect = _state3.effect,
           offset = _state3.offset;
+      var onPlaceChange = this.props.onPlaceChange;
 
       var node = _reactDom2.default.findDOMNode(this);
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
 
-      if (result.isNewState) {
-        // Switch to reverse placement
-        return this.setState(result.newState, function () {
+      if (result.isNewState || placeBeforeUpdate !== place) {
+        var nextPlace = result.newState ? result.newState.place : place;
+        return this.setState({
+          placeBeforeUpdate: nextPlace,
+          place: nextPlace
+        }, function () {
+          if (placeBeforeUpdate !== nextPlace && onPlaceChange) {
+            onPlaceChange(nextPlace);
+          }
           _this8.updatePosition();
         });
       }
@@ -2089,7 +2100,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           disable = _state4.disable,
           isEmptyTip = _state4.isEmptyTip;
 
-      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
 
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
@@ -2125,6 +2136,10 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   insecure: _propTypes2.default.bool,
   class: _propTypes2.default.string,
   className: _propTypes2.default.string,
+  leftClassName: _propTypes2.default.string,
+  topClassName: _propTypes2.default.string,
+  rightClassName: _propTypes2.default.string,
+  bottomClassName: _propTypes2.default.string,
   id: _propTypes2.default.string,
   html: _propTypes2.default.bool,
   delayHide: _propTypes2.default.number,
@@ -2140,7 +2155,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   disable: _propTypes2.default.bool,
   scrollHide: _propTypes2.default.bool,
   resizeHide: _propTypes2.default.bool,
-  wrapper: _propTypes2.default.string
+  wrapper: _propTypes2.default.string,
+  onPlaceChange: _propTypes2.default.func // called when tooltip switches between any two places
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,

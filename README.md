@@ -62,8 +62,12 @@ Global|Specific	|Type	|Values  |  Description
  globalEventOff | | String| e.g. click| global event to hide tooltip (global only)
  isCapture | data-iscapture | Bool | true, false | when set to true, custom event's propagation mode will be capture
  offset	|   data-offset  |  Object  |  top, right, bottom, left | `data-offset="{'top': 10, 'left': 10}"` for specific and `offset={{top: 10, left: 10}}` for global
-multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
-className	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
+ multiline	|   data-multiline  |  Bool  |  true, false | support `<br>`, `<br />` to make multiline
+ className	|   data-class  |  String  |   | extra custom class, can use !important to overwrite react-tooltip's default class
+ leftClassName	|   data-class  |  String  |   | extra custom class when place == left, can use !important to overwrite react-tooltip's default class
+ topClassName	|   data-class  |  String  |   | extra custom class when place == top, can use !important to overwrite react-tooltip's default class
+ rightClassName	|   data-class  |  String  |   | extra custom class when place == right, can use !important to overwrite react-tooltip's default class
+ bottomClassName	|   data-class  |  String  |   | extra custom class when place == bottom, can use !important to overwrite react-tooltip's default class
  html	|   data-html  |  Bool  |  true, false  |  `<p data-tip="<p>HTML tooltip</p>" data-html={true}></p>` or `<ReactTooltip html={true} />`
  delayHide	|   data-delay-hide  |  Number  |   | `<p data-tip="tooltip" data-delay-hide='1000'></p>` or `<ReactTooltip delayHide={1000} />`
  delayShow	|   data-delay-show  |  Number  |   | `<p data-tip="tooltip" data-delay-show='1000'></p>` or `<ReactTooltip delayShow={1000} />`
@@ -76,6 +80,7 @@ className	|   data-class  |  String  |   | extra custom class, can use !importan
  scrollHide | data-scroll-hide | Bool | true, false | Hide the tooltip when scrolling, default is true
  resizeHide | null | Bool | true, false | Hide the tooltip when resizing the window, default is true
  wrapper | null | String | div, span | Selecting the wrapper element of the react tooltip, default is div
+ onPlaceChange | null | Func | () => {} | Function that will be called every time the value of place changes
 
 ## Using react component as tooltip
 Check the example [React-tooltip Test](http://wwayne.com/react-tooltip)
