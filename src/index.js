@@ -41,6 +41,10 @@ class ReactTooltip extends Component {
     insecure: PropTypes.bool,
     class: PropTypes.string,
     className: PropTypes.string,
+    leftClassName: PropTypes.string,
+    topClassName: PropTypes.string,
+    rightClassName: PropTypes.string,
+    bottomClassName: PropTypes.string,
     id: PropTypes.string,
     html: PropTypes.bool,
     delayHide: PropTypes.number,
@@ -57,7 +61,7 @@ class ReactTooltip extends Component {
     scrollHide: PropTypes.bool,
     resizeHide: PropTypes.bool,
     wrapper: PropTypes.string,
-    onPositionChange: PropTypes.func
+    onPlaceChange: PropTypes.func // called when tooltip switches between any two places
   };
 
   static defaultProps = {
@@ -71,6 +75,7 @@ class ReactTooltip extends Component {
   constructor (props) {
     super(props)
     this.state = {
+      placeBeforeUpdate: null,
       place: 'top', // Direction of tooltip
       type: 'dark', // Color theme of tooltip
       effect: 'float', // float or fixed
@@ -388,25 +393,22 @@ class ReactTooltip extends Component {
 
   // Calculation the position
   updatePosition () {
-    const {currentEvent, currentTarget, place, effect, offset} = this.state
-    const { onPositionChange } = this.props;
+    const {currentEvent, currentTarget, placeBeforeUpdate, place, effect, offset} = this.state
+    const { onPlaceChange } = this.props
     const node = ReactDOM.findDOMNode(this)
     const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
 
-    if (result.isNewState) {
-      // TODO: Delete this comment section:
-      // result.newState is an object of the form: { place: top|bottom|left|right },
-      // therefore the following `this.setState` sets the `place` as top, bottom, left, or right.
-      return this.setState(result.newState, () => {
-        this.updatePosition()
-        if (onPositionChange) {
-          onPositionChange(true, result.newState.place);
+    if (result.isNewState || placeBeforeUpdate !== place) {
+      const nextPlace = result.newState ? result.newState.place : place
+      return this.setState({
+        placeBeforeUpdate: nextPlace,
+        place: nextPlace
+      }, () => {
+        if (placeBeforeUpdate !== nextPlace && onPlaceChange) {
+          onPlaceChange(nextPlace)
         }
+        this.updatePosition()
       })
-    } else {
-      if (onPositionChange) {
-        onPositionChange(false, place);
-      }
     }
     // Set tooltip position
     node.style.left = result.position.left + 'px'
@@ -445,6 +447,10 @@ class ReactTooltip extends Component {
       {'place-bottom': this.state.place === 'bottom'},
       {'place-left': this.state.place === 'left'},
       {'place-right': this.state.place === 'right'},
+      {[this.props.topClassName]: this.props.topClassName && this.state.place === 'top'},
+      {[this.props.leftClassName]: this.props.leftClassName && this.state.place === 'left'},
+      {[this.props.bottomClassName]: this.props.bottomClassName && this.state.place === 'bottom'},
+      {[this.props.rightClassName]: this.props.rightClassName && this.state.place === 'right'},
       {'type-dark': this.state.type === 'dark'},
       {'type-success': this.state.type === 'success'},
       {'type-warning': this.state.type === 'warning'},
