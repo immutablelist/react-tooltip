@@ -93,8 +93,7 @@ class ReactTooltip extends Component {
       currentTarget: null, // Current target of mouse event
       ariaProps: parseAria(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false,
-      tooltipWidth: 0
+      disable: false
     }
 
     this.bind([
@@ -398,7 +397,7 @@ class ReactTooltip extends Component {
     const { onPlaceChange } = this.props
     const node = ReactDOM.findDOMNode(this)
     const result = getPosition(currentEvent, currentTarget, node, place, effect, offset)
-
+    const widthToGo = this.refs.tooltipWidth.clientWidth || 0
     if (result.isNewState || placeBeforeUpdate !== place) {
       const nextPlace = result.newState ? result.newState.place : place
       return this.setState({
@@ -411,8 +410,9 @@ class ReactTooltip extends Component {
         this.updatePosition()
       })
     }
+
     // Set tooltip position
-    node.style.left = result.position.left + 40 + 'px'
+    node.style.left = result.position.left + widthToGo / 2 + 'px'
     node.style.top = result.position.top + 'px'
   }
 
@@ -459,7 +459,6 @@ class ReactTooltip extends Component {
       {'type-info': this.state.type === 'info'},
       {'type-light': this.state.type === 'light'}
     )
-    console.log(`----`, this.state.tooltipWidth)
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
       Wrapper = ReactTooltip.defaultProps.wrapper
@@ -469,7 +468,6 @@ class ReactTooltip extends Component {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
-                 ref={(value) => this.setState({ tooltipWidth: value })}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
       )
@@ -477,7 +475,7 @@ class ReactTooltip extends Component {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
-                 ref={(value) => this.setState({ tooltipWidth: value })}
+                 ref={'tooltipWidth'}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )
     }

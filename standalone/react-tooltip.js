@@ -1669,8 +1669,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       currentTarget: null, // Current target of mouse event
       ariaProps: (0, _aria.parseAria)(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false,
-      tooltipWidth: 0
+      disable: false
     };
 
     _this.bind(['showTooltip', 'updateTooltip', 'hideTooltip', 'globalRebuild', 'globalShow', 'globalHide', 'onWindowResize']);
@@ -2045,7 +2044,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var node = _reactDom2.default.findDOMNode(this);
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
-
+      var widthToGo = this.refs.tooltipWidth.clientWidth || 0;
       if (result.isNewState || placeBeforeUpdate !== place) {
         var nextPlace = result.newState ? result.newState.place : place;
         return this.setState({
@@ -2058,8 +2057,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           _this8.updatePosition();
         });
       }
+
       // Set tooltip position
-      node.style.left = result.position.left + 40 + 'px';
+      node.style.left = result.position.left + widthToGo / 2 + 'px';
       node.style.top = result.position.top + 'px';
     }
 
@@ -2093,8 +2093,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   }, {
     key: 'render',
     value: function render() {
-      var _this9 = this;
-
       var _state4 = this.state,
           placeholder = _state4.placeholder,
           extraClass = _state4.extraClass,
@@ -2104,7 +2102,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           isEmptyTip = _state4.isEmptyTip;
 
       var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
-      console.log('----', this.state.tooltipWidth);
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
         Wrapper = ReactTooltip.defaultProps.wrapper;
@@ -2113,9 +2110,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       if (html) {
         return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
         }, ariaProps, {
-          ref: function ref(value) {
-            return _this9.setState({ tooltipWidth: value });
-          },
           'data-id': 'tooltip',
           dangerouslySetInnerHTML: { __html: placeholder } }));
       } else {
@@ -2123,9 +2117,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           Wrapper,
           _extends({ className: tooltipClass + ' ' + extraClass
           }, ariaProps, {
-            ref: function ref(value) {
-              return _this9.setState({ tooltipWidth: value });
-            },
+            ref: 'tooltipWidth',
             'data-id': 'tooltip' }),
           placeholder
         );
