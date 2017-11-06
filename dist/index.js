@@ -500,7 +500,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
       }
 
       // Set tooltip position
-      node.style.left = result.position.left + widthToGo / 2 - 24 + 'px';
+      node.style.left = result.position.left + widthToGo / 2 - 14 + 'px';
       node.style.top = result.position.top + 'px';
     }
 

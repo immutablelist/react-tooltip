@@ -412,7 +412,7 @@ class ReactTooltip extends Component {
     }
 
     // Set tooltip position
-    node.style.left = result.position.left + (widthToGo / 2) - 24 + 'px'
+    node.style.left = result.position.left + (widthToGo / 2) - 14 + 'px'
     node.style.top = result.position.top + 'px'
   }
 
