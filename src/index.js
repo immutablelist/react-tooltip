@@ -93,7 +93,8 @@ class ReactTooltip extends Component {
       currentTarget: null, // Current target of mouse event
       ariaProps: parseAria(props), // aria- and role attributes
       isEmptyTip: false,
-      disable: false
+      disable: false,
+      tooltipWidth: 0
     }
 
     this.bind([
@@ -458,7 +459,7 @@ class ReactTooltip extends Component {
       {'type-info': this.state.type === 'info'},
       {'type-light': this.state.type === 'light'}
     )
-
+    console.log(`----`, this.state.tooltipWidth)
     let Wrapper = this.props.wrapper
     if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
       Wrapper = ReactTooltip.defaultProps.wrapper
@@ -468,6 +469,7 @@ class ReactTooltip extends Component {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
+                 ref={(value) => this.setState({ tooltipWidth: value })}
                  data-id='tooltip'
                  dangerouslySetInnerHTML={{__html: placeholder}}/>
       )
