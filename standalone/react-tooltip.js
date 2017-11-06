@@ -2123,6 +2123,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           Wrapper,
           _extends({ className: tooltipClass + ' ' + extraClass
           }, ariaProps, {
+            ref: function ref(value) {
+              return _this9.setState({ tooltipWidth: value });
+            },
             'data-id': 'tooltip' }),
           placeholder
         );

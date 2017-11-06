@@ -477,6 +477,7 @@ class ReactTooltip extends Component {
       return (
         <Wrapper className={`${tooltipClass} ${extraClass}`}
                  {...ariaProps}
+                 ref={(value) => this.setState({ tooltipWidth: value })}
                  data-id='tooltip'>{placeholder}</Wrapper>
       )
     }
