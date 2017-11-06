@@ -411,7 +411,7 @@ class ReactTooltip extends Component {
       })
     }
     // Set tooltip position
-    node.style.left = result.position.left + 'px'
+    node.style.left = result.position.left + 40 + 'px'
     node.style.top = result.position.top + 'px'
   }
 

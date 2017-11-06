@@ -499,7 +499,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
         });
       }
       // Set tooltip position
-      node.style.left = result.position.left + 'px';
+      node.style.left = result.position.left + 40 + 'px';
       node.style.top = result.position.top + 'px';
     }
 
