@@ -1,4 +1,4 @@
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ReactTooltip = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /*!
   Copyright (c) 2016 Jed Watson.
   Licensed under the MIT License (MIT), see
@@ -1557,7 +1557,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 },{"../constant":12}],19:[function(require,module,exports){
 (function (global){
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -1649,6 +1649,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     _classCallCheck(this, ReactTooltip);
 
     var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
+
+    _this.tooltipWidth = _react2.default.createRef();
 
     _this.state = {
       placeBeforeUpdate: null,
@@ -1743,9 +1745,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function getTargetArray(id) {
       var targetArray = void 0;
       if (!id) {
-        targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
+        targetArray = document.querySelectorAll("[data-tip]:not([data-for])");
       } else {
-        var escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        var escaped = id.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
         targetArray = document.querySelectorAll('[data-tip][data-for="' + escaped + '"]');
       }
       // targetArray is a NodeList, convert it to a real array
@@ -2044,7 +2046,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var node = _reactDom2.default.findDOMNode(this);
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
-      var widthToGo = this.refs.tooltipWidth.clientWidth || 0;
+      var widthToGo = this.tooltipWidth.current.clientWidth || 0;
+
       if (result.isNewState || placeBeforeUpdate !== place) {
         var nextPlace = result.newState ? result.newState.place : place;
         return this.setState({
@@ -2057,7 +2060,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           _this8.updatePosition();
         });
       }
-
       // Set tooltip position
       node.style.left = result.position.left + widthToGo / 2 - 14 + 'px';
       node.style.top = result.position.top + 'px';
@@ -2101,24 +2103,30 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           disable = _state4.disable,
           isEmptyTip = _state4.isEmptyTip;
 
-      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { show: this.state.show && !disable && !isEmptyTip }, { border: this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
         Wrapper = ReactTooltip.defaultProps.wrapper;
       }
 
       if (html) {
-        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
+        return _react2.default.createElement(Wrapper, _extends({
+          className: tooltipClass + ' ' + extraClass,
+          ref: this.tooltipWidth
         }, ariaProps, {
           'data-id': 'tooltip',
-          dangerouslySetInnerHTML: { __html: placeholder } }));
+          dangerouslySetInnerHTML: { __html: placeholder }
+        }));
       } else {
         return _react2.default.createElement(
           Wrapper,
-          _extends({ className: tooltipClass + ' ' + extraClass
+          _extends({
+            className: tooltipClass + ' ' + extraClass,
+            ref: this.tooltipWidth
           }, ariaProps, {
-            ref: 'tooltipWidth',
-            'data-id': 'tooltip' }),
+            'data-id': 'tooltip'
+          }),
           placeholder
         );
       }
@@ -2157,7 +2165,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   scrollHide: _propTypes2.default.bool,
   resizeHide: _propTypes2.default.bool,
   wrapper: _propTypes2.default.string,
-  onPlaceChange: _propTypes2.default.func // called when tooltip switches between any two places
+  onPlaceChange: _propTypes2.default.func // called when tooltip switches between any two places,
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,

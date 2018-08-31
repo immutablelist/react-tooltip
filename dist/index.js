@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -90,6 +90,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     _classCallCheck(this, ReactTooltip);
 
     var _this = _possibleConstructorReturn(this, (ReactTooltip.__proto__ || Object.getPrototypeOf(ReactTooltip)).call(this, props));
+
+    _this.tooltipWidth = _react2.default.createRef();
 
     _this.state = {
       placeBeforeUpdate: null,
@@ -184,9 +186,9 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
     value: function getTargetArray(id) {
       var targetArray = void 0;
       if (!id) {
-        targetArray = document.querySelectorAll('[data-tip]:not([data-for])');
+        targetArray = document.querySelectorAll("[data-tip]:not([data-for])");
       } else {
-        var escaped = id.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        var escaped = id.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
         targetArray = document.querySelectorAll('[data-tip][data-for="' + escaped + '"]');
       }
       // targetArray is a NodeList, convert it to a real array
@@ -485,7 +487,8 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
 
       var node = _reactDom2.default.findDOMNode(this);
       var result = (0, _getPosition2.default)(currentEvent, currentTarget, node, place, effect, offset);
-      var widthToGo = this.refs.tooltipWidth.clientWidth || 0;
+      var widthToGo = this.tooltipWidth.current.clientWidth || 0;
+
       if (result.isNewState || placeBeforeUpdate !== place) {
         var nextPlace = result.newState ? result.newState.place : place;
         return this.setState({
@@ -498,7 +501,6 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           _this8.updatePosition();
         });
       }
-
       // Set tooltip position
       node.style.left = result.position.left + widthToGo / 2 - 14 + 'px';
       node.style.top = result.position.top + 'px';
@@ -542,24 +544,30 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
           disable = _state4.disable,
           isEmptyTip = _state4.isEmptyTip;
 
-      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { 'show': this.state.show && !disable && !isEmptyTip }, { 'border': this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+      var tooltipClass = (0, _classnames2.default)('__react_component_tooltip', { show: this.state.show && !disable && !isEmptyTip }, { border: this.state.border }, { 'place-top': this.state.place === 'top' }, { 'place-bottom': this.state.place === 'bottom' }, { 'place-left': this.state.place === 'left' }, { 'place-right': this.state.place === 'right' }, _defineProperty({}, this.props.topClassName, this.props.topClassName && this.state.place === 'top'), _defineProperty({}, this.props.leftClassName, this.props.leftClassName && this.state.place === 'left'), _defineProperty({}, this.props.bottomClassName, this.props.bottomClassName && this.state.place === 'bottom'), _defineProperty({}, this.props.rightClassName, this.props.rightClassName && this.state.place === 'right'), { 'type-dark': this.state.type === 'dark' }, { 'type-success': this.state.type === 'success' }, { 'type-warning': this.state.type === 'warning' }, { 'type-error': this.state.type === 'error' }, { 'type-info': this.state.type === 'info' }, { 'type-light': this.state.type === 'light' });
+
       var Wrapper = this.props.wrapper;
       if (ReactTooltip.supportedWrappers.indexOf(Wrapper) < 0) {
         Wrapper = ReactTooltip.defaultProps.wrapper;
       }
 
       if (html) {
-        return _react2.default.createElement(Wrapper, _extends({ className: tooltipClass + ' ' + extraClass
+        return _react2.default.createElement(Wrapper, _extends({
+          className: tooltipClass + ' ' + extraClass,
+          ref: this.tooltipWidth
         }, ariaProps, {
           'data-id': 'tooltip',
-          dangerouslySetInnerHTML: { __html: placeholder } }));
+          dangerouslySetInnerHTML: { __html: placeholder }
+        }));
       } else {
         return _react2.default.createElement(
           Wrapper,
-          _extends({ className: tooltipClass + ' ' + extraClass
+          _extends({
+            className: tooltipClass + ' ' + extraClass,
+            ref: this.tooltipWidth
           }, ariaProps, {
-            ref: 'tooltipWidth',
-            'data-id': 'tooltip' }),
+            'data-id': 'tooltip'
+          }),
           placeholder
         );
       }
@@ -598,7 +606,7 @@ var ReactTooltip = (0, _staticMethods2.default)(_class = (0, _windowListener2.de
   scrollHide: _propTypes2.default.bool,
   resizeHide: _propTypes2.default.bool,
   wrapper: _propTypes2.default.string,
-  onPlaceChange: _propTypes2.default.func // called when tooltip switches between any two places
+  onPlaceChange: _propTypes2.default.func // called when tooltip switches between any two places,
 }, _class2.defaultProps = {
   insecure: true,
   resizeHide: true,
